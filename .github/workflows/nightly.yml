@@ -11,7 +11,7 @@ env:
 
 jobs:
   build-oci-images:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     permissions:
       contents: write
       packages: write
@@ -56,7 +56,7 @@ jobs:
 
   # do this before we build nightly binaries
   prepare-release:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     permissions:
       contents: write
     steps:
@@ -91,7 +91,7 @@ jobs:
             arch: aarch64
             target: aarch64-apple-darwin
 
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ (matrix.os) == 'ubuntu-latest' && fromJSON('[\"self-hosted\",\"linux\",\"x64\"]') || (matrix.os) == 'ubuntu-24.04-arm' && fromJSON('[\"self-hosted\",\"linux\",\"ARM64\"]') || (matrix.os) == 'macos-latest' && fromJSON('[\"self-hosted\",\"macOS\",\"ARM64\"]') || (matrix.os) }}"
     permissions:
       contents: write
       packages: write
